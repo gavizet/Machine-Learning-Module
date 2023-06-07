@@ -10,7 +10,7 @@ You can find the [full project here](https://github.com/42-AI/bootcamp_machine-l
 
 It is a continuation of the Python Module I have [completed here](https://github.com/gavizet/Python-Module)
 
-The pdf files of each module can be downloaded from the [release page](https://github.com/42-AI/bootcamp_machine_learning/releases)
+The pdf files of each module can be downloaded from the [release page](https://github.com/42-AI/bootcamp_machine-learning/releases)
 
 ## Usage
 All testing done with Pytest or directly into the exercice's file.
