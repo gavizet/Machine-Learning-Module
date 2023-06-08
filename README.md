@@ -4,11 +4,11 @@
   Machine Learning Bootcamp
 </h1>
 
-This project is a Machine Learning bootcamp created by [42 AI](http://www.42ai.fr). We are using Python for all of it.
+This project is a continuation of the Python Module I have [completed here](https://github.com/gavizet/Python-Module)
+
+It is a Machine Learning bootcamp created by [42 AI](http://www.42ai.fr).
 
 You can find the [full project here](https://github.com/42-AI/bootcamp_machine-learning/)
-
-It is a continuation of the Python Module I have [completed here](https://github.com/gavizet/Python-Module)
 
 The pdf files of each module can be downloaded from the [release page](https://github.com/42-AI/bootcamp_machine-learning/releases)
 
