@@ -12,6 +12,28 @@ You can find the [full project here](https://github.com/42-AI/bootcamp_machine-l
 
 The pdf files of each module can be downloaded from the [release page](https://github.com/42-AI/bootcamp_machine-learning/releases)
 
+## Install
+Clone the repository and navigate to it
+> \> git clone https://github.com/gavizet/Machine-Learning-Module.git
+> 
+> \> cd Machine-Learning-Module
+
+[Install miniconda for your operating system](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
+
+See the [cheatsheet](https://conda.io/projects/conda/en/latest/user-guide/cheatsheet.html) for more information about conda commands.
+
+Create conda environment in current repository
+> \> conda create --prefix=<your_env_name> -f environment.yml
+
+Create conda environment in 'normal' path
+> \> conda create --name <your_env_name> -f environment.yml
+
+Activate your conda environment
+> \> conda activate <your_env_name>
+
+Check env was installed properly
+> \> conda info --envs
+
 ## Usage
 All testing done with Pytest or directly into the exercice's file.
 
