@@ -86,14 +86,22 @@ class Matrix:
                     if self.shape[1] != other.shape[0]:
                         raise ValueError("Wrong shape. Matrix 1 needs to have the same amount \
                                         of column as Matrix 2 has rows.")
-                    pass
+                    result = []
+                    return type(self)(result)
                 elif type(other) == Vector:
                     if self.shape[1] != other.shape[0]:
                         raise ValueError("Wrong shape. Matrix needs to have the same amount \
                                         of column as Vector has rows.")
+                    result = []
+                    return type(other)(result)
                 # Other is int / float
                 else:
-                    pass
+                    # Multiply each number of the Matrix by Scalar
+                    result = [[self.data[row][col] * other.data[row][col]
+                               for col in range(self.shape[1])]
+                              for row in range(self.shape[0])]
+                    return type(self)(result)
+                return result
         except Exception as exc:
             print(f"Exception: {exc.__class__.__name__} "
                   f"at line {exc.__traceback__.tb_lineno} "
