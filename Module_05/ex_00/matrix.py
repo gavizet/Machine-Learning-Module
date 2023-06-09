@@ -55,23 +55,27 @@ class Matrix:
         self.shape = self.__get_shape(arg)
 
     def __add__(self, other: Self):
-        result = 0
+        if not isinstance(other, Matrix) or self.shape != other.shape:
+            raise ValueError("Can only add between 2 Matrix of the same shape")
+        result = [[self.data[row][col] + other.data[row][col]
+                   for col in range(self.shape[1])]
+                  for row in range(self.shape[0])]
         return type(self)(result)
 
     def __radd__(self, other: Self):
         return self.__add__(other)
 
     def __sub__(self, other: Self):
-        return self.__add__(-other)
+        pass
 
     def __rsub__(self, other: Self):
-        return self.__add__(-other)
+        return self.__sub__(other)
 
     def __mul__(self, other):
         pass
 
     def __rmul__(self, other):
-        pass
+        return self.__mul__(other)
 
     def __truediv__(self, other):
         pass
@@ -103,15 +107,17 @@ class Vector(Matrix):
 
 if __name__ == "__main__":
     m_list = [[0.0, 1.0], [2.0, 3.0], [4.0, 5.0]]
-    m_tuple = (7, 2)
-    matrix = Matrix(m_list)
-    print(matrix)
-    matrix = Matrix(m_tuple)
-    print(matrix)
+    m_listw = [[0.0, 1.0], [2.0, 3.0], [4.0, 5.0]]
+    m_tuple = (3, 2)
+    matrix1 = Matrix(m_list)
+    print(matrix1)
+    matrix2 = Matrix(m_listw)
+    print(matrix2)
     print("---------------------")
-    v_list = [[0., 1., 2., 3., 4.]]
-    v_tuple = (7, 1)
-    vector = Vector(v_list)
-    print(vector)
-    vector = Vector(v_tuple)
-    print(vector)
+    print(matrix1 + matrix2)
+    # v_list = [[0., 1., 2., 3., 4.]]
+    # v_tuple = (7, 1)
+    # vector = Vector(v_list)
+    # print(vector)
+    # vector = Vector(v_tuple)
+    # print(vector)
