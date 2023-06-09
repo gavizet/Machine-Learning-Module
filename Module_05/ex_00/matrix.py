@@ -77,7 +77,29 @@ class Matrix:
         return self.__sub__(other)
 
     def __mul__(self, other):
-        pass
+        try:
+            if type(self) == Matrix:
+                if not isinstance(other, (int, float, Matrix, Vector)):
+                    raise TypeError(
+                        "Can only multiply between a Matrix and a Matrix/Vector/Scalar")
+                if type(other) == Matrix:
+                    if self.shape[1] != other.shape[0]:
+                        raise ValueError("Wrong shape. Matrix 1 needs to have the same amount \
+                                        of column as Matrix 2 has rows.")
+                    pass
+                elif type(other) == Vector:
+                    if self.shape[1] != other.shape[0]:
+                        raise ValueError("Wrong shape. Matrix needs to have the same amount \
+                                        of column as Vector has rows.")
+                # Other is int / float
+                else:
+                    pass
+        except Exception as exc:
+            print(f"Exception: {exc.__class__.__name__} "
+                  f"at line {exc.__traceback__.tb_lineno} "
+                  f"of {__file__} -"
+                  f"{exc}")
+            return None
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -119,7 +141,7 @@ if __name__ == "__main__":
     matrix2 = Matrix(m_listw)
     print(matrix2)
     print("---------------------")
-    print(matrix1 + matrix2)
+    print(matrix1 - matrix2)
     # v_list = [[0., 1., 2., 3., 4.]]
     # v_tuple = (7, 1)
     # vector = Vector(v_list)
