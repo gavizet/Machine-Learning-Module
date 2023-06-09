@@ -93,6 +93,9 @@ class Matrix:
                         raise ValueError("Wrong shape. Matrix needs to have the same amount \
                                         of column as Vector has rows.")
                     # TODO: CHECK THIS SHIT WORKS
+                    # If row vector, multiply other.data[col]
+                    # If column vector, multiply other.data[col][0]
+                    # I think ?
                     result = [sum(self.data[row][col] * other.data[col][0]
                                   for col in range(self.shape[1]))
                               for row in range(self.shape[0])]
