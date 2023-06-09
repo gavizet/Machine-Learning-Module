@@ -66,7 +66,12 @@ class Matrix:
         return self.__add__(other)
 
     def __sub__(self, other: Self):
-        pass
+        if not isinstance(other, Matrix) or self.shape != other.shape:
+            raise ValueError("Can only add between 2 Matrix of the same shape")
+        result = [[self.data[row][col] - other.data[row][col]
+                   for col in range(self.shape[1])]
+                  for row in range(self.shape[0])]
+        return type(self)(result)
 
     def __rsub__(self, other: Self):
         return self.__sub__(other)
