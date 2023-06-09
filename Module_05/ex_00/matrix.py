@@ -92,7 +92,10 @@ class Matrix:
                     if self.shape[1] != other.shape[0]:
                         raise ValueError("Wrong shape. Matrix needs to have the same amount \
                                         of column as Vector has rows.")
-                    result = []
+                    # TODO: CHECK THIS SHIT WORKS
+                    result = [sum(self.data[row][col] * other.data[col][0]
+                                  for col in range(self.shape[1]))
+                              for row in range(self.shape[0])]
                     return type(other)(result)
                 # Other is int / float
                 else:
