@@ -55,7 +55,8 @@ class Matrix:
         self.shape = self.__get_shape(arg)
 
     def __add__(self, other: Self):
-        pass
+        result = 0
+        return type(self)(result)
 
     def __radd__(self, other: Self):
         return self.__add__(other)
