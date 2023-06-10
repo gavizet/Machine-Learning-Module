@@ -55,6 +55,12 @@ class Matrix:
         self.shape = self.__get_shape(arg)
         self.type = type(self)
 
+    def T(self):
+        result = [[self.data[col][row]
+                   for col in range(self.shape[0])]
+                  for row in range(self.shape[1])]
+        return type(self)(result)
+
     def __add__(self, other: Self):
         if not isinstance(other, Matrix) or self.shape != other.shape:
             raise ValueError("Can only add between 2 Matrix of the same shape")
@@ -128,9 +134,6 @@ class Matrix:
             f"Shape: {self.shape}\n"\
             f"Values: {self.data}"
 
-    def T(self):
-        pass
-
 
 class Vector(Matrix):
     """ Vector manipulation class"""
@@ -185,3 +188,9 @@ if __name__ == "__main__":
     # print(matrix_2_3 / matrix_3_2)
     # print(matrix_3_2 / vector_1_3)
     # print(4 / matrix_3_2)
+    print()
+    print(repr(matrix_2_3))
+    print(matrix_2_3.T())
+    print()
+    print(repr(vector_1_3))
+    print(vector_1_3.T())
