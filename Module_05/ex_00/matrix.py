@@ -54,7 +54,6 @@ class Matrix:
         self.data = self.__get_data(arg)
         self.shape = self.__get_shape(arg)
         self.type = type(self)
-        print(self.type)
 
     def __add__(self, other: Self):
         if not isinstance(other, Matrix) or self.shape != other.shape:
@@ -124,7 +123,9 @@ class Matrix:
         return self.__repr__()
 
     def __repr__(self: Self):
-        return f"Values: {str(self.data)} - Shape: {str(self.shape)}"
+        return f"Type: {type(self).__name__}\n"\
+            f"Shape: {self.shape}\n"\
+            f"Values: {row for row in self.data}"
 
     def T(self):
         pass
@@ -143,18 +144,31 @@ class Vector(Matrix):
 
 
 if __name__ == "__main__":
-    m_list = [[0.0, 1.0], [2.0, 3.0], [4.0, 5.0]]
-    m_listw = [[0.0, 1.0], [2.0, 3.0], [4.0, 5.0]]
-    m_tuple = (3, 2)
-    matrix1 = Matrix(m_list)
-    print(matrix1)
-    matrix2 = Matrix(m_listw)
-    print(matrix2)
-    print("---------------------")
-    print(matrix1 - matrix2)
-    v_list = [[1., 2., 3.]]
-    v_tuple = (3, 1)
-    vector = Vector(v_list)
-    print(vector)
-    vector = Vector(v_tuple)
-    print(vector)
+    # tests = [
+    #     ('matrix_2_3', Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])),
+    #     ('matrix_3_2', Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])),
+    #     ('matrix_1_3', Matrix([[1, 2, 3]])),
+    #     ('matrix_3_1', Matrix([[1], [2], [3]])),
+    #     ('vector_1_3', Vector([[1, 2, 3]])),
+    #     ('vector_3_1', Vector([[1], [2], [3]])),
+    # ]
+
+    matrix_2_3 = Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
+    matrix_3_2 = Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
+    matrix_1_3 = Matrix([[1, 2, 3]])
+    matrix_3_1 = Matrix([[1], [2], [3]])
+    vector_1_3 = Vector([[1, 2, 3]])
+    vector_3_1 = Vector([[1], [2], [3]])
+
+    def test_mul(arg1_name, arg2_name, arg1, arg2):
+        print("=============")
+        print(f"Testing {arg1_name} with {arg2_name}")
+        arg1.__str__()
+        arg2.__str__()
+        arg1 * arg2
+
+    test_mul('matrix_2_3', 'matrix_3_2', matrix_2_3, matrix_3_2)
+    test_mul('matrix_3_2', 'matrix_2_3', matrix_3_2, matrix_2_3)
+    test_mul('matrix_1_3', 'matrix_3_1', matrix_1_3, matrix_3_1)
+    test_mul('vector_1_3', 'vector_3_1', vector_1_3, vector_3_1)
+    test_mul('vector_1_3', 'vector_3_1', vector_3_1, vector_1_3)
