@@ -78,37 +78,30 @@ class Matrix:
         return self.__sub__(other)
 
     def __mul__(self, other):
-        try:
-            if isinstance(other, (int, float)):
-                # Multiply each number of the Matrix by Scalar
-                result = [[self.data[row][col] * other.data[row][col]
-                           for col in range(self.shape[1])]
-                          for row in range(self.shape[0])]
-                return type(self)(result)
-            if isinstance(other, (Matrix, Vector)):
-                # Can only multiply if n_col(self) == n_row(other)
-                if self.shape[1] != other.shape[0]:
-                    raise ValueError("Wrong shape. Can only do AxB if the number of columns of \
-                                    A is equal to the number of rows of B.")
-                # Result Shape is always (n_row(self), n_col(other)).
-                # Matrix x Matrix => Matrix || Matrix x Vector => Vector
-                # B(3, 1) * A(1, 3) => C(3, 3) || A(1, 3) * B(3, 1) => C(1, 1)
-                if self.shape[0] == 1 or other.shape[1] == 1:
-                    result = Vector((self.shape[0], other.shape[1]))
-                else:
-                    result = Matrix((self.shape[0], other.shape[1]))
-                result = [[sum(self.data[self_row][neutral] * other.data[neutral][other_col]
-                               for neutral in range(self.shape[1]))
-                           for other_col in range(other.shape[1])]
-                          for self_row in range(self.shape[0])]
-                return result
-            raise TypeError("Type should be a Matrix/Vector/Scalar")
-        except Exception as exc:
-            print(f"Uncaught Exception: {exc.__class__.__name__} "
-                  f"at line {exc.__traceback__.tb_lineno} "
-                  f"of {__file__} -"
-                  f"{exc}")
-            return None
+        if isinstance(other, (int, float)):
+            # Multiply each number of the Matrix by Scalar
+            result = [[self.data[row][col] * other
+                       for col in range(self.shape[1])]
+                      for row in range(self.shape[0])]
+            return type(self)(result)
+        if isinstance(other, (Matrix, Vector)):
+            # Can only multiply if n_col(self) == n_row(other)
+            if self.shape[1] != other.shape[0]:
+                raise ValueError(
+                    "Wrong shape. Can only do AxB if the number of columns of A is equal to the number of rows of B.")
+            # Result Shape is always (n_row(self), n_col(other)).
+            # Matrix x Matrix => Matrix || Matrix x Vector => Vector
+            # B(3, 1) * A(1, 3) => C(3, 3) || A(1, 3) * B(3, 1) => C(1, 1)
+            if self.shape[0] == 1 or other.shape[1] == 1:
+                result = Vector((self.shape[0], other.shape[1]))
+            else:
+                result = Matrix((self.shape[0], other.shape[1]))
+            result = [[sum(self.data[self_row][neutral] * other.data[neutral][other_col]
+                           for neutral in range(self.shape[1]))
+                       for other_col in range(other.shape[1])]
+                      for self_row in range(self.shape[0])]
+            return result
+        raise TypeError("Type should be a Matrix/Vector/Scalar")
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -123,9 +116,9 @@ class Matrix:
         return self.__repr__()
 
     def __repr__(self: Self):
-        return f"Type: {type(self).__name__}\n"\
+        return f"Type: {type(self).__name__} - "\
             f"Shape: {self.shape}\n"\
-            f"Values: {row for row in self.data}"
+            f"Values: {self.data}"
 
     def T(self):
         pass
@@ -163,12 +156,19 @@ if __name__ == "__main__":
     def test_mul(arg1_name, arg2_name, arg1, arg2):
         print("=============")
         print(f"Testing {arg1_name} with {arg2_name}")
-        arg1.__str__()
-        arg2.__str__()
-        arg1 * arg2
+        print()
+        print(repr(arg1))
+        print()
+        print(repr(arg2))
+        print()
+        result = arg1 * arg2
+        print(f"Result: {repr(result)}")
 
     test_mul('matrix_2_3', 'matrix_3_2', matrix_2_3, matrix_3_2)
     test_mul('matrix_3_2', 'matrix_2_3', matrix_3_2, matrix_2_3)
     test_mul('matrix_1_3', 'matrix_3_1', matrix_1_3, matrix_3_1)
     test_mul('vector_1_3', 'vector_3_1', vector_1_3, vector_3_1)
     test_mul('vector_1_3', 'vector_3_1', vector_3_1, vector_1_3)
+    test_mul('vector_1_3', 'scalar', vector_1_3, 2)
+    test_mul('matrix_3_2', 'scalar', matrix_3_2, 2)
+    test_mul('matrix_2_3', 'vector_3_1', matrix_2_3, vector_3_1)
