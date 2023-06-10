@@ -144,7 +144,9 @@ class Vector(Matrix):
             raise ValueError("Not a valid vector shape.")
 
     def dot(self, other: Self):
-        pass
+        if not isinstance(other, Vector) or self.shape != other.shape:
+            raise ValueError(
+                "Can only do the dot product with 2 Vectors of the same shape")
 
 
 if __name__ == "__main__":
@@ -189,8 +191,14 @@ if __name__ == "__main__":
     # print(matrix_3_2 / vector_1_3)
     # print(4 / matrix_3_2)
     print()
+    print(repr(vector_1_3))
+    print(vector_1_3.T())
+    print()
+    print(repr(vector_3_1))
+    print(vector_3_1.T())
+    print()
     print(repr(matrix_2_3))
     print(matrix_2_3.T())
     print()
-    print(repr(vector_1_3))
-    print(vector_1_3.T())
+    print(repr(matrix_3_2))
+    print(matrix_3_2.T())
