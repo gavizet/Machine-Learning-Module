@@ -180,3 +180,8 @@ if __name__ == "__main__":
     test_mul('vector_1_3', 'scalar', vector_1_3, 2)
     test_mul('matrix_3_2', 'scalar', matrix_3_2, 2)
     test_mul('matrix_2_3', 'vector_3_1', matrix_2_3, vector_3_1)
+
+    print(matrix_3_2 / 2)
+    # print(matrix_2_3 / matrix_3_2)
+    # print(matrix_3_2 / vector_1_3)
+    # print(4 / matrix_3_2)
