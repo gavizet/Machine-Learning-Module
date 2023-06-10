@@ -107,16 +107,24 @@ class Matrix:
         return self.__mul__(other)
 
     def __truediv__(self, other):
-        pass
+        if not isinstance(other, (int, float)):
+            raise ValueError("Can only divide with int of float")
+        if other == 0:
+            raise ValueError("Cannot divide by 0 you pleb")
+        result = [[self.data[row][col] / other
+                   for col in range(self.shape[1])]
+                  for row in range(self.shape[0])]
+        return type(self)(result)
 
     def __rtruediv__(self, other):
-        pass
+        raise ArithmeticError(
+            "Division of a scalar by a Vector/Matrix is not defined here.")
 
     def __str__(self: Self):
         return self.__repr__()
 
     def __repr__(self: Self):
-        return f"Type: {type(self).__name__} - "\
+        return f"{type(self).__name__} - "\
             f"Shape: {self.shape}\n"\
             f"Values: {self.data}"
 
