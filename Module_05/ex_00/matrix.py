@@ -53,6 +53,8 @@ class Matrix:
         self.__check_args(arg)
         self.data = self.__get_data(arg)
         self.shape = self.__get_shape(arg)
+        self.type = type(self)
+        print(self.type)
 
     def __add__(self, other: Self):
         if not isinstance(other, Matrix) or self.shape != other.shape:
@@ -78,38 +80,32 @@ class Matrix:
 
     def __mul__(self, other):
         try:
-            if type(self) == Matrix:
-                if not isinstance(other, (int, float, Matrix, Vector)):
-                    raise TypeError(
-                        "Can only multiply between a Matrix and a Matrix/Vector/Scalar")
-                if type(other) == Matrix:
-                    if self.shape[1] != other.shape[0]:
-                        raise ValueError("Wrong shape. Matrix 1 needs to have the same amount \
-                                        of column as Matrix 2 has rows.")
-                    result = []
-                    return type(self)(result)
-                elif type(other) == Vector:
-                    if self.shape[1] != other.shape[0]:
-                        raise ValueError("Wrong shape. Matrix needs to have the same amount \
-                                        of column as Vector has rows.")
-                    # TODO: CHECK THIS SHIT WORKS
-                    # If row vector, multiply other.data[col]
-                    # If column vector, multiply other.data[col][0]
-                    # I think ?
-                    result = [sum(self.data[row][col] * other.data[col][0]
-                                  for col in range(self.shape[1]))
-                              for row in range(self.shape[0])]
-                    return type(other)(result)
-                # Other is int / float
+            if isinstance(other, (int, float)):
+                # Multiply each number of the Matrix by Scalar
+                result = [[self.data[row][col] * other.data[row][col]
+                           for col in range(self.shape[1])]
+                          for row in range(self.shape[0])]
+                return type(self)(result)
+            if isinstance(other, (Matrix, Vector)):
+                # Can only multiply if n_col(self) == n_row(other)
+                if self.shape[1] != other.shape[0]:
+                    raise ValueError("Wrong shape. Can only do AxB if the number of columns of \
+                                    A is equal to the number of rows of B.")
+                # Result Shape is always (n_row(self), n_col(other)).
+                # Matrix x Matrix => Matrix || Matrix x Vector => Vector
+                # B(3, 1) * A(1, 3) => C(3, 3) || A(1, 3) * B(3, 1) => C(1, 1)
+                if self.shape[0] == 1 or other.shape[1] == 1:
+                    result = Vector((self.shape[0], other.shape[1]))
                 else:
-                    # Multiply each number of the Matrix by Scalar
-                    result = [[self.data[row][col] * other.data[row][col]
-                               for col in range(self.shape[1])]
-                              for row in range(self.shape[0])]
-                    return type(self)(result)
+                    result = Matrix((self.shape[0], other.shape[1]))
+                result = [[sum(self.data[self_row][neutral] * other.data[neutral][other_col]
+                               for neutral in range(self.shape[1]))
+                           for other_col in range(other.shape[1])]
+                          for self_row in range(self.shape[0])]
                 return result
+            raise TypeError("Type should be a Matrix/Vector/Scalar")
         except Exception as exc:
-            print(f"Exception: {exc.__class__.__name__} "
+            print(f"Uncaught Exception: {exc.__class__.__name__} "
                   f"at line {exc.__traceback__.tb_lineno} "
                   f"of {__file__} -"
                   f"{exc}")
@@ -156,9 +152,9 @@ if __name__ == "__main__":
     print(matrix2)
     print("---------------------")
     print(matrix1 - matrix2)
-    # v_list = [[0., 1., 2., 3., 4.]]
-    # v_tuple = (7, 1)
-    # vector = Vector(v_list)
-    # print(vector)
-    # vector = Vector(v_tuple)
-    # print(vector)
+    v_list = [[1., 2., 3.]]
+    v_tuple = (3, 1)
+    vector = Vector(v_list)
+    print(vector)
+    vector = Vector(v_tuple)
+    print(vector)
