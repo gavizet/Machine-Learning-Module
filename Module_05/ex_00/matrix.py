@@ -147,6 +147,9 @@ class Vector(Matrix):
         if not isinstance(other, Vector) or self.shape != other.shape:
             raise ValueError(
                 "Can only do the dot product with 2 Vectors of the same shape")
+        result = sum([self.data[row][col] * other.data[row][col]
+                     for col in range(self.shape[1]) for row in range(self.shape[0])])
+        return result
 
 
 if __name__ == "__main__":
@@ -202,3 +205,12 @@ if __name__ == "__main__":
     print()
     print(repr(matrix_3_2))
     print(matrix_3_2.T())
+
+    # Row vector dot product
+    vector1 = Vector([[1, 2, 3]])
+    vector2 = Vector([[1, 2, 3]])
+    print(vector1.dot(vector2))
+    # Column vector dot product
+    vector3 = Vector([[1], [2], [3]])
+    vector4 = Vector([[1], [2], [3]])
+    print(vector1.dot(vector2))
