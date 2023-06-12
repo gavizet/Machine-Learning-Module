@@ -1,6 +1,5 @@
 """" Manipulation and understanding of basic matrix operations.
 Numpy usage is forbidden"""
-from typing import Self, List, Tuple
 
 
 class Matrix:
@@ -8,12 +7,12 @@ class Matrix:
 
     @staticmethod
     def __check_args(arg) -> None:
-        if not isinstance(arg, (List, Tuple)):
+        if not isinstance(arg, (list, tuple)):
             raise ValueError(
                 f"Argument has to be a List or a Tuple, not {type(arg)}")
-        if isinstance(arg, List):
+        if isinstance(arg, list):
             for index, elem in enumerate(arg):
-                if not isinstance(elem, List):
+                if not isinstance(elem, list):
                     raise ValueError(f"Argumnt has to be a List of List, \
                          not a List of {type(elem)}")
                 if index == 0:
@@ -24,7 +23,7 @@ class Matrix:
                 if not all(isinstance(num, (int, float)) for num in elem):
                     raise ValueError(
                         "All elements of the sublists need to be an int or a float")
-        if isinstance(arg, Tuple):
+        if isinstance(arg, tuple):
             if len(arg) != 2 or not \
                     all((isinstance(num, (int, float)) and num > 0) for num in arg):
                 raise ValueError(
@@ -61,7 +60,7 @@ class Matrix:
                   for row in range(self.shape[1])]
         return type(self)(result)
 
-    def __add__(self, other: Self):
+    def __add__(self, other):
         if not isinstance(other, Matrix) or self.shape != other.shape:
             raise ValueError("Can only add between 2 Matrix of the same shape")
         result = [[self.data[row][col] + other.data[row][col]
@@ -69,10 +68,10 @@ class Matrix:
                   for row in range(self.shape[0])]
         return type(self)(result)
 
-    def __radd__(self, other: Self):
+    def __radd__(self, other):
         return self.__add__(other)
 
-    def __sub__(self, other: Self):
+    def __sub__(self, other):
         if not isinstance(other, Matrix) or self.shape != other.shape:
             raise ValueError("Can only add between 2 Matrix of the same shape")
         result = [[self.data[row][col] - other.data[row][col]
@@ -80,7 +79,7 @@ class Matrix:
                   for row in range(self.shape[0])]
         return type(self)(result)
 
-    def __rsub__(self, other: Self):
+    def __rsub__(self, other):
         return self.__sub__(other)
 
     def __mul__(self, other):
@@ -106,7 +105,7 @@ class Matrix:
                            for neutral in range(self.shape[1]))
                        for other_col in range(other.shape[1])]
                       for self_row in range(self.shape[0])]
-            return result
+            return type(self)(result)
         raise TypeError("Type should be a Matrix/Vector/Scalar")
 
     def __rmul__(self, other):
@@ -126,10 +125,10 @@ class Matrix:
         raise ArithmeticError(
             "Division of a scalar by a Vector/Matrix is not defined here.")
 
-    def __str__(self: Self):
+    def __str__(self):
         return self.__repr__()
 
-    def __repr__(self: Self):
+    def __repr__(self):
         return f"{type(self).__name__} - "\
             f"Shape: {self.shape}\n"\
             f"Values: {self.data}"
@@ -143,7 +142,7 @@ class Vector(Matrix):
         if self.shape[0] != 1 and self.shape[1] != 1:
             raise ValueError("Not a valid vector shape.")
 
-    def dot(self, other: Self):
+    def dot(self, other):
         if not isinstance(other, Vector) or self.shape != other.shape:
             raise ValueError(
                 "Can only do the dot product with 2 Vectors of the same shape")
@@ -151,66 +150,5 @@ class Vector(Matrix):
                      for col in range(self.shape[1]) for row in range(self.shape[0])])
         return result
 
-
-if __name__ == "__main__":
-    # tests = [
-    #     ('matrix_2_3', Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])),
-    #     ('matrix_3_2', Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])),
-    #     ('matrix_1_3', Matrix([[1, 2, 3]])),
-    #     ('matrix_3_1', Matrix([[1], [2], [3]])),
-    #     ('vector_1_3', Vector([[1, 2, 3]])),
-    #     ('vector_3_1', Vector([[1], [2], [3]])),
-    # ]
-
-    matrix_2_3 = Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
-    matrix_3_2 = Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
-    matrix_1_3 = Matrix([[1, 2, 3]])
-    matrix_3_1 = Matrix([[1], [2], [3]])
-    vector_1_3 = Vector([[1, 2, 3]])
-    vector_3_1 = Vector([[1], [2], [3]])
-
-    def test_mul(arg1_name, arg2_name, arg1, arg2):
-        print("=============")
-        print(f"Testing {arg1_name} with {arg2_name}")
-        print()
-        print(repr(arg1))
-        print()
-        print(repr(arg2))
-        print()
-        result = arg1 * arg2
-        print(f"Result: {repr(result)}")
-
-    test_mul('matrix_2_3', 'matrix_3_2', matrix_2_3, matrix_3_2)
-    test_mul('matrix_3_2', 'matrix_2_3', matrix_3_2, matrix_2_3)
-    test_mul('matrix_1_3', 'matrix_3_1', matrix_1_3, matrix_3_1)
-    test_mul('vector_1_3', 'vector_3_1', vector_1_3, vector_3_1)
-    test_mul('vector_1_3', 'vector_3_1', vector_3_1, vector_1_3)
-    test_mul('vector_1_3', 'scalar', vector_1_3, 2)
-    test_mul('matrix_3_2', 'scalar', matrix_3_2, 2)
-    test_mul('matrix_2_3', 'vector_3_1', matrix_2_3, vector_3_1)
-
-    print(matrix_3_2 / 2)
-    # print(matrix_2_3 / matrix_3_2)
-    # print(matrix_3_2 / vector_1_3)
-    # print(4 / matrix_3_2)
-    print()
-    print(repr(vector_1_3))
-    print(vector_1_3.T())
-    print()
-    print(repr(vector_3_1))
-    print(vector_3_1.T())
-    print()
-    print(repr(matrix_2_3))
-    print(matrix_2_3.T())
-    print()
-    print(repr(matrix_3_2))
-    print(matrix_3_2.T())
-
-    # Row vector dot product
-    vector1 = Vector([[1, 2, 3]])
-    vector2 = Vector([[1, 2, 3]])
-    print(vector1.dot(vector2))
-    # Column vector dot product
-    vector3 = Vector([[1], [2], [3]])
-    vector4 = Vector([[1], [2], [3]])
-    print(vector1.dot(vector2))
+# Tested with pytest, just use this command from root folder of the project :
+# 'pytest -vv tests/Module_05/test_ex00.py'
