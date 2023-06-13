@@ -34,8 +34,18 @@ Activate your conda environment
 Check env was installed properly
 > \> conda info --envs
 
-## Usage
-All testing done with Pytest or directly into the exercice's file.
+Install our Machine-Learning-Module package in editable mode
+> \> python -m pip install -e .
+
+Uninstall package
+> \> pip uninstall Machine-Learning-Module
+
+## Tests
+Testing was done in 2 ways :
+- With Pytest in `tests/`. Use `pytest -vv` to launch them all or `pytest tests/Module_num/file_name` to test an exercice individually
+- Directly in the exercice's module. For example, you can test Exercice 02 of Module 05 by using `python Module_05/ex_02/prediction.py`
+
+Some modules were tested with one or the other, and some with both methods.
 
 ## Curriculum
 
@@ -72,3 +82,10 @@ All testing done with Pytest or directly into the exercice's file.
 
 > Regularization, overfitting. Regularized loss function, regularized gradient descent.  
 > Regularized linear regression. Regularized logistic regression.
+
+## Python Packaging
+Just some packaging documentation / guides / articles for myself :
+- [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
+- [Setuptools package discovery](https://setuptools.pypa.io/en/latest/userguide/package_discovery.html)
+- [How-to article on pyproject.toml](https://betterprogramming.pub/a-pyproject-toml-developers-cheat-sheet-5782801fb3ed)
+- [Article about packaging with Conda and pyproject.toml](https://samharrison.science/posts/conda-package-fortran-python/)
