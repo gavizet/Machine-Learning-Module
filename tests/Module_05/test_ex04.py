@@ -13,7 +13,7 @@ THETA = [
 
 
 @pytest.mark.parametrize("theta, expected", THETA)
-def test_simple_predict(theta, expected):
+def test_predict_(theta, expected):
     np.testing.assert_array_equal(predict_(feat, theta), expected)
 
 
@@ -26,6 +26,6 @@ ERRORS = [
 
 
 @pytest.mark.parametrize("x, theta, expected", ERRORS)
-def test_simple_predict_errors(x, theta, expected):
+def test_errors_predict_(x, theta, expected):
     result = predict_(x, theta)
     assert result == expected
