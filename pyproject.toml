@@ -2,8 +2,9 @@
 requires = ["setuptools", "setuptools-scm", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["Module_05", "Module_06", "Module_06", "Module_07", "Module_08", "Module_09"]
+# Since we're using a flat structure package, we need this for setuptools to know which folders to create the package with
+[tool.setuptools.packages.find]
+include = ['Module_*']
 
 [project]
 name = "Machine-Learning-Module"
@@ -28,11 +29,6 @@ dependencies = [
     "pip",
     "pytest",
     "pycodestyle",
-    "numpy",
-    "pandas",
-    "matplotlib",
-    "scipy",
-    "jupyter",
 ]
 
 [project.urls]
