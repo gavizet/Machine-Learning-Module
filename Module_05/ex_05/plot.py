@@ -4,16 +4,17 @@ import matplotlib.pyplot as plt
 from Module_05.ex_04.prediction import predict_
 
 
+def _ndarray_is_int_float(array: np.ndarray) -> bool:
+    if not np.issubdtype(array.dtype, np.floating) and not np.issubdtype(array.dtype, np.integer):
+        return False
+    return True
+
+
 def _args_are_valid(x, y, theta) -> bool:
-    if not all([isinstance(arg, np.ndarray) for arg in [x, y, theta]]):
-        return False
-    if (not np.issubdtype(x.dtype, np.floating) and not np.issubdtype(x.dtype, np.integer)):
-        return False
-    if (not np.issubdtype(y.dtype, np.floating) and not np.issubdtype(y.dtype, np.integer)):
-        return False
-    if (not np.issubdtype(theta.dtype, np.floating) and
-            not np.issubdtype(theta.dtype, np.integer)):
-        return False
+    args = [x, y, theta]
+    for arg in args:
+        if not isinstance(arg, np.ndarray) or not _ndarray_is_int_float(arg):
+            return False
     if x.shape not in [(x.size, ), (x.size, 1)]:
         return False
     if theta.shape not in [(2, ), (2, 1)]:
