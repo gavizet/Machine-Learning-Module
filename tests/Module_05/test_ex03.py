@@ -27,4 +27,4 @@ ERRORS = [
 @pytest.mark.parametrize("array, expected", ERRORS)
 def test_simple_predict_errors(array, expected):
     result = add_intercept(array)
-    assert result == None
+    assert result == expected
