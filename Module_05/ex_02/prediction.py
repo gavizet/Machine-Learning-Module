@@ -4,14 +4,20 @@ import numpy as np
 def _args_are_valid(features, theta) -> bool:
     if not isinstance(features, np.ndarray) or not isinstance(theta, np.ndarray):
         return False
-    print(features.shape)
-    print(theta.shape)
-    if features.shape[1] != 1 or theta.shape != (2, 1):
+    if (not np.issubdtype(features.dtype, np.floating) and
+            not np.issubdtype(features.dtype, np.integer)):
+        return False
+    if (not np.issubdtype(theta.dtype, np.floating) and
+            not np.issubdtype(theta.dtype, np.integer)):
+        return False
+    if features.shape not in [(features.size, ), (features.size, 1)]:
+        return False
+    if theta.shape not in [(2, ), (2, 1)]:
         return False
     return True
 
 
-def simple_predict(features, theta) -> np.ndarray or None:
+def simple_predict(features: np.ndarray, theta: np.ndarray) -> np.ndarray or None:
     """Computes the vector of prediction y_hat from two non-empty numpy.ndarray.
 
     Args:
@@ -28,15 +34,43 @@ def simple_predict(features, theta) -> np.ndarray or None:
     """
     if not _args_are_valid(features, theta):
         return None
-    return "Yo"
+    y_hat = theta[0] + (theta[1] * features)
+    return np.array(y_hat, dtype=float)
 
 
 def main():
-    features_vector = 3
-    param_vector = 0
-    result = simple_predict(features_vector, param_vector)
-    print(result)
+    features_vector = np.arange(1, 6)
+
+    # Test 1
+    param_vector1 = np.array([5, 0])
+    result = simple_predict(features_vector, param_vector1)
+    print("=============")
+    print("Expected: array([5., 5., 5., 5., 5.])")
+    print(f"Result: {repr(result)}")
+
+    # Test 2
+    param_vector2 = np.array([0, 1])
+    result = simple_predict(features_vector, param_vector2)
+    print("=============")
+    print("Expected: array([1., 2., 3., 4., 5.])")
+    print(f"Result: {repr(result)}")
+
+    # Test 3
+    param_vector3 = np.array([5, 3])
+    result = simple_predict(features_vector, param_vector3)
+    print("=============")
+    print("Expected: array([ 8., 11., 14., 17., 20.])")
+    print(f"Result: {repr(result)}")
+
+    # Test 4
+    param_vector4 = np.array([-3, 1])
+    result = simple_predict(features_vector, param_vector4)
+    print("=============")
+    print("Expected: array([-2., -1., 0., 1., 2.])")
+    print(f"Result: {repr(result)}")
 
 
 if __name__ == "__main__":
     main()
+
+# Pytest test file can be found in tests/Module_05/test_ex02.py
