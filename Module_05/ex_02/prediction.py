@@ -1,7 +1,17 @@
+""" Understand and manipulate the notion of hypothesis in machine learning. """
 import numpy as np
 
 
 def _args_are_valid(features, theta) -> bool:
+    """Make sure the parameters are valid for our program
+
+    Args:
+        features (np.ndarray): vector of dimension m * 1
+        theta (np.ndarray): vector of dimension 2 * 1
+
+    Returns:
+        bool: True if features are of the desired type and dimensions, False otherwise
+    """
     if not isinstance(features, np.ndarray) or not isinstance(theta, np.ndarray):
         return False
     if (not np.issubdtype(features.dtype, np.floating) and
