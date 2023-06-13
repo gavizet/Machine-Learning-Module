@@ -29,6 +29,8 @@ dependencies = [
     "pip",
     "pytest",
     "pycodestyle",
+    "matplotlib",
+    "numpy"
 ]
 
 [project.urls]
