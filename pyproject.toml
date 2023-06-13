@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["Module_05", "Module_06", "Module_06", "Module_07", "Module_08", "Module_09"]
+
+[project]
+name = "Machine-Learning-Module"
+version = "1.0.0"
+authors = [
+    {name = "Gaetan Vizet", email = "gaetan.vizet@hotmail.fr"},
+]
+description = "A package containing programs that introduce us to Machine Learning with Python"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT License"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers - Students",
+    "Topic :: Machine Learning",
+    "Topic :: Python",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: >=3.7",
+    "Operating System :: Linux",
+]
+dependencies = [
+    "pip",
+    "pytest",
+    "pycodestyle",
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "scipy",
+    "jupyter",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/gavizet/Machine-Learning-Module"
