@@ -29,7 +29,7 @@ def add_intercept(x: np.ndarray) -> np.ndarray or None:
             not np.issubdtype(x.dtype, np.integer)):
         return None
     ones_col = np.ones((x.shape[0], 1))
-    X = np.c_[ones_col, array]
+    X = np.c_[ones_col, x]
     return X
 
 
