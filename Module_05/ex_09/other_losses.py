@@ -1,8 +1,7 @@
 """ Deepen the notion of loss function in machine learning """
-import numpy as np
-# Needed for tests
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from math import sqrt
+import numpy as np
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 
 def _args_are_valid(y, y_hat) -> bool:
