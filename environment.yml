@@ -9,5 +9,6 @@ dependencies:
   - scipy
   - pandas
   - matplotlib
+  - scikit-learn
   - jupyter
   - pycodestyle

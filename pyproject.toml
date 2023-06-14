@@ -30,7 +30,9 @@ dependencies = [
     "pytest",
     "pycodestyle",
     "matplotlib",
-    "numpy"
+    "numpy",
+    "scikit-learn",
+    "scipy",
 ]
 
 [project.urls]
