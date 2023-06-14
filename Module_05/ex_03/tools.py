@@ -11,7 +11,7 @@ import numpy as np
 # https://stackoverflow.com/questions/8486294/how-do-i-add-an-extra-column-to-a-numpy-array
 
 
-def add_intercept(array: np.ndarray) -> np.ndarray or None:
+def add_intercept(x: np.ndarray) -> np.ndarray or None:
     """Adds a column of '1' to the non-empty numpy.array x.
     Args:
         array: has to be a numpy.array of dimension m * n.
@@ -24,13 +24,13 @@ def add_intercept(array: np.ndarray) -> np.ndarray or None:
     Raises:
         This function should not raise any Exception.
     """
-    if not isinstance(array, np.ndarray) or array.size == 0 or \
-        (not np.issubdtype(array.dtype, np.floating) and
-            not np.issubdtype(array.dtype, np.integer)):
+    if not isinstance(x, np.ndarray) or x.size == 0 or \
+        (not np.issubdtype(x.dtype, np.floating) and
+            not np.issubdtype(x.dtype, np.integer)):
         return None
-    ones_col = np.ones((array.shape[0], 1))
-    result = np.c_[ones_col, array]
-    return result
+    ones_col = np.ones((x.shape[0], 1))
+    X = np.c_[ones_col, array]
+    return X
 
 
 def main():
