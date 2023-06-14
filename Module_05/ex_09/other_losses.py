@@ -141,13 +141,10 @@ def main():
     print("MAE")
     print(f"Result: {mae_(x, y)}")
     print(f"Expected: {mean_absolute_error(x, y)}")
-
     print()
 
     # R2-score
     print("R2-score")
-    r2score_(x, y)
-    r2_score(x, y)
     print(f"Result: {r2score_(x, y)}")
     print(f"Expected: {r2_score(x, y)}")
 
