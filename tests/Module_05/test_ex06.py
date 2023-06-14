@@ -20,7 +20,7 @@ ERRORS = [
 
 
 @pytest.mark.parametrize("y, y_hat, expected", ERRORS)
-def test_errors_predict_(y, y_hat, expected):
+def test_errors_loss_(y, y_hat, expected):
     result = _args_are_valid(y, y_hat)
     assert result == expected
 
