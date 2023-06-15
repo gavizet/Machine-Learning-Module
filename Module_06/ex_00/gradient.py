@@ -10,9 +10,9 @@ def simple_gradient(x, y, theta):
         The three arrays must have compatible shapes.
 
     Args:
-        x: has to be an numpy.array, a vector of shape m * 1.
-        y: has to be an numpy.array, a vector of shape m * 1.
-        theta: has to be an numpy.array, a 2 * 1 vector.
+        x (numpy.array):, vector of shape m * 1, represents y_hat -> predicted values
+        y (numpy.array): vector of shape m * 1, represents y -> real values
+        theta (numpy.array): a 2 * 1 vector, represents our parameters
 
     Return:
         The gradient as a numpy.array, a vector of shape 2 * 1.
@@ -27,22 +27,24 @@ def simple_gradient(x, y, theta):
 
 
 def main():
+    # x -> predicted values, y -> real values
     x = np.array([12.4956442, 21.5007972, 31.5527382,
                  48.9145838, 57.5088733]).reshape((-1, 1))
     y = np.array([37.4013816, 36.1473236, 45.7655287,
                  46.6793434, 59.5585554]).reshape((-1, 1))
-    print(repr(x))
-    print(repr(y))
 
-    # Example 0:
-    theta1 = np.array([2, 0.7]).reshape((-1, 1))
-    print(repr(theta1))
-    simple_gradient(x, y, theta1)
-    # Output: array([[-19.0342574], [-586.66875564]])
     # Example 1:
+    theta1 = np.array([2, 0.7]).reshape((-1, 1))
+    print(f"With a = {theta1[0]} and b = {theta1[1]}")
+    print(f"Result: {repr(simple_gradient(x, y, theta1))}")
+    print("Expected: array([[-19.0342574], [-586.66875564]])")
+    print()
+
+    # Example 2:
     theta2 = np.array([1, -0.4]).reshape((-1, 1))
-    simple_gradient(x, y, theta2)
-    # Output: array([[-57.86823748], [-2230.12297889]])
+    print(f"With a = {theta2[0]} and b = {theta2[1]}")
+    print(f"Result: {repr(simple_gradient(x, y, theta2))}")
+    print("Expected: array([[-57.86823748], [-2230.12297889]])")
 
 
 if __name__ == "__main__":
