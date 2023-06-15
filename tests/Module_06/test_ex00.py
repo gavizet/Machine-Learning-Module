@@ -18,5 +18,5 @@ GRADIENTS = [
 
 
 @pytest.mark.parametrize("args, expected", GRADIENTS)
-def test_errors_gradient(args, expected):
+def test_gradient(args, expected):
     pass
