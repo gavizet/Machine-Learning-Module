@@ -28,7 +28,7 @@ def _args_are_valid(x, y, theta):
     return True
 
 
-def simple_gradient(x, y, theta):
+def simple_gradient(x: np.ndarray, y: np.ndarray, theta: np.ndarray): np.ndarray | None
     """ Computes a gradient vector from three non-empty numpy.array, without any for loop.
         The three arrays must have compatible shapes.
 
