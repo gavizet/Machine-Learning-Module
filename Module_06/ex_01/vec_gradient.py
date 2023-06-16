@@ -1,3 +1,4 @@
+""" Understand and manipulate the notion of gradient and gradient descent in machine learning. """
 import numpy as np
 
 
