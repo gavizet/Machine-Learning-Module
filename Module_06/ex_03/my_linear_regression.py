@@ -13,14 +13,14 @@ class MyLinearRegression():
         if not isinstance(thetas, np.ndarray) or \
                 thetas.shape not in [(thetas.size, ), (thetas.size, 1)]:
             raise ValueError(
-                "thetas has to be a numpy ndarray of dimension m * 1.")
+                "thetas has to be a numpy.ndarray of dimension m * 1.")
         if not (np.issubdtype(thetas.dtype, np.integer) or
                 np.issubdtype(thetas.dtype, np.floating)):
             raise ValueError(
-                "thetas has to be a numpy ndarray of floats or ints")
+                "thetas has to be a numpy.ndarray of floats or ints")
         self.alpha = alpha
         self.max_iter = max_iter
-        # Cast as float64, otherwise numpy throws a _UFuncOutputCastingError
+        # Cast as float64, otherwise numpy throws a _UFuncOutputCastingError during fit_
         self.thetas = thetas.astype('float64')
 
     @staticmethod
@@ -28,7 +28,7 @@ class MyLinearRegression():
         """ Make sure the parameters are numpy ndarrays of valid dimensions for our program
 
         Args:
-            *args (np.ndarray): vectors of dimension m * 1
+            *args (numpy.ndarray): vectors of dimension m * 1
 
         Returns:
             bool: True if args are of the desired type and dimensions, False otherwise
@@ -54,6 +54,7 @@ class MyLinearRegression():
 
         Returns:
             x_prime (numpy.array): of dimension m * (n + 1).
+            None if any argument is not of the expected type or dimensions.
         """
         if not self._args_are_valid_ndarrays(x):
             return None
@@ -64,6 +65,16 @@ class MyLinearRegression():
         return x_prime
 
     def predict_(self, x: np.ndarray) -> np.ndarray | None:
+        """ Computes the vector of prediction y_hat from two non-empty numpy.array 
+            representing our input values (x) and our parameters (theta).
+
+        Args:
+            x (np.ndarray): vector of dimension m * 1, represents our input values.
+
+        Returns:
+            y_hat (np.ndarray): vector of dimension m * 1, represents our expected values.
+            None if any argument is not of the expected type or dimensions.
+        """
         if not self._args_are_valid_ndarrays(x):
             return None
         x_prime = self.add_intercept_(x)
@@ -75,13 +86,12 @@ class MyLinearRegression():
         """ Computes all the elements (y_pred - y)^2 of the loss function.
 
         Args:
-            y (np.ndarray): a vector.
-            y_hat (np.ndarray): a vector
+            y (numpy.ndarray): vector of dimensions m * 1.
+            y_hat (numpy.ndarray): vector of dimensions m * 1
 
         Returns:
-            loss_elem (numpy.ndarray): vector of dimension (number of the training examples, 1).
-            None if there is a dimension matching problem between X, Y or theta.
-            None if any argument is not of the expected type.
+            loss_elem (numpy.ndarray): vector of dimension m * 1.
+            None if any argument is not of the expected type or dimensions.
         """
         if not self._args_are_valid_ndarrays(y, y_hat):
             return None
@@ -92,13 +102,12 @@ class MyLinearRegression():
         """ Computes the half mean squared error between y_hat and y
 
         Args:
-            y (np.ndarray): a vector, the real values
-            y_hat (np.ndarray): a vector, the expected values
+            y (np.ndarray): vector (m, 1), the real values.
+            y_hat (np.ndarray): vector (m, 1), the expected values.
 
         Returns:
             loss : float, the lower it is, the better
-            None if there is a dimension matching problem between X, Y or theta.
-            None if any argument is not of the expected type.
+            None if any argument is not of the expected type or dimensions.
         """
         if not self._args_are_valid_ndarrays(y, y_hat):
             return None
@@ -109,6 +118,18 @@ class MyLinearRegression():
         return loss
 
     def gradient_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray | None:
+        """ Computes a gradient vector from two non-empty numpy.array.
+
+        Args:
+            x (numpy.array): vector of shape m * 1.
+            y (numpy.ndarray): vector of shape m * 1.
+
+        Return:
+            gradient (numpy.ndarray): vector of the same dimensions as self.thetas.
+            None if any argument is not of the expected type or dimensions.
+        """
+        if not self._args_are_valid_ndarrays(x, y):
+            return None
         elem_num = len(x)
         # Get predicted values
         y_hat = self.predict_(x)
@@ -120,12 +141,22 @@ class MyLinearRegression():
         return gradient
 
     def fit_(self, x: np.ndarray, y: np.ndarray) -> None:
+        """ Fits the model to the training dataset contained in x and y and
+            update our self.thetas (params) based on the result
+
+        Args:
+            x (np.ndarray): vector of dimension m * 1, represents our predicted values.
+            y (np.ndarray): vector of dimension m * 1, represents our real values.
+
+        Returns:
+            None if any argument is not of the expected type or dimensions.
+        """
         if not self._args_are_valid_ndarrays(x, y):
             return None
         for _ in range(self.max_iter):
             # Get gradiant for current value of thetas (params)
             gradient = self.gradient_(x, y)
-            # Update theta based on alpha and the gradient value we just got
+            # Update thetas based on alpha and the gradient value we just got
             self.thetas -= self.alpha * gradient
 
 
@@ -196,6 +227,8 @@ def main():
     result = lr2.loss_(y, y_hat)
     expected = 58.524664606009345
     np.testing.assert_almost_equal(result, expected)
+
+    print("No assert was raised, all tests passed. GG !")
 
 
 if __name__ == "__main__":
