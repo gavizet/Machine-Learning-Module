@@ -109,7 +109,6 @@ def fit_(x: np.ndarray, y: np.ndarray, theta: np.ndarray,
 
     Returns:
         new_theta (np.ndarray): vector of dimension 2 * 1. 
-            Scaled parameters so that we get our loss function at its minimum value.
         None if there is a matching dimension problem.
 
     Raises:
