@@ -48,6 +48,13 @@ class MyLinearRegression():
         return True
 
     def add_intercept_(self, x: np.ndarray) -> np.ndarray | None:
+        """ Adds a column of '1' to the x numpy.ndarray.
+        Args:
+            x (numpy.ndarray): has to be of dimension m * n.
+
+        Returns:
+            x_prime (numpy.array): of dimension m * (n + 1).
+        """
         if not self._args_are_valid_ndarrays(x):
             return None
         # Create column filled with 1s with same size as x
@@ -65,12 +72,34 @@ class MyLinearRegression():
         return y_hat
 
     def loss_elem_(self, y: np.ndarray, y_hat: np.ndarray) -> np.ndarray | None:
+        """ Computes all the elements (y_pred - y)^2 of the loss function.
+
+        Args:
+            y (np.ndarray): a vector.
+            y_hat (np.ndarray): a vector
+
+        Returns:
+            loss_elem (numpy.ndarray): vector of dimension (number of the training examples, 1).
+            None if there is a dimension matching problem between X, Y or theta.
+            None if any argument is not of the expected type.
+        """
         if not self._args_are_valid_ndarrays(y, y_hat):
             return None
         elem_loss = np.square(y_hat - y)
         return elem_loss
 
     def loss_(self, y: np.ndarray, y_hat: np.ndarray) -> np.ndarray | None:
+        """ Computes the half mean squared error between y_hat and y
+
+        Args:
+            y (np.ndarray): a vector, the real values
+            y_hat (np.ndarray): a vector, the expected values
+
+        Returns:
+            loss : float, the lower it is, the better
+            None if there is a dimension matching problem between X, Y or theta.
+            None if any argument is not of the expected type.
+        """
         if not self._args_are_valid_ndarrays(y, y_hat):
             return None
         elem_num = len(y)
