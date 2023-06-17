@@ -63,6 +63,15 @@ class MyLinearRegression():
         elem_loss = np.square(y_hat - y)
         return elem_loss
 
+    def loss_(self, y: np.ndarray, y_hat: np.ndarray) -> np.ndarray | None:
+        if not self._args_are_valid_ndarrays(y, y_hat):
+            return None
+        elem_num = len(y)
+        # Sum the loss for each expected value and divide by the number of values * 2
+        # to get our loss number
+        loss = np.sum(self.loss_elem_(y, y_hat)) / (elem_num * 2)
+        return loss
+
     def fit_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray | None:
         if not self._args_are_valid_ndarrays(x, y):
             return None
