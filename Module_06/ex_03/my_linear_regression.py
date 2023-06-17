@@ -49,17 +49,13 @@ class MyLinearRegression():
     def predict_(self, x: np.ndarray) -> np.ndarray | None:
         if not self._args_are_valid_ndarrays(x):
             return None
-        return True
-
-    def loss_elem_(self, y: np.ndarray, y_hat: np.ndarray) -> np.ndarray | None:
-        if not self._args_are_valid_ndarrays(y, y_hat):
-            return None
-        return True
-
-    def loss_(self, y: np.ndarray, y_hat: np.ndarray) -> np.ndarray | None:
-        if not self._args_are_valid_ndarrays(y, y_hat):
-            return None
-        return True
+        # Create column filled with 1s with same size as x
+        ones_col = np.ones((x.shape[0], 1))
+        # Add column left of vector x so it becomes a Matrix X'
+        x_prime = np.c_[ones_col, x]
+        # Do dot product between X' (input values) and theta (params) to get our expected values
+        y_hat = x_prime.dot(self.thetas)
+        return y_hat
 
     def fit_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray | None:
         if not self._args_are_valid_ndarrays(x, y):
