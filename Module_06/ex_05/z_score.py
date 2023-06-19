@@ -62,6 +62,7 @@ def main_tests():
                           0.28795027,
                           -1.72770165])
     np.testing.assert_array_almost_equal(result2, expected2)
+    print("Tests for z_score.py raised no assert error, gg.")
 
 
 if __name__ == "__main__":
