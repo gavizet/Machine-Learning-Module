@@ -117,6 +117,24 @@ class MyLinearRegression():
         loss = np.sum(self.loss_elem_(y, y_hat)) / (elem_num * 2)
         return loss
 
+    def mse_(self, y: np.ndarray, y_hat: np.ndarray) -> float | None:
+        """ Calculate the MSE between the predicted output and the real output.
+        Errors increase in quadratic fashion > penalizes errors, susceptible to outliers.
+
+        Args:
+            y (numpy.array): vector of dimension m * 1, real values
+            y_hat (numpy.ndarray): vector of dimension m * 1, expected value
+
+        Returns:
+            mse: has to be a float. 
+            None if any argument is not of the expected type or dimensions.
+        """
+        if not self._args_are_valid_ndarrays(y, y_hat):
+            return None
+        elem_num = len(y)
+        mse = np.sum(self.loss_elem_(y, y_hat)) / elem_num
+        return mse
+
     def gradient_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray | None:
         """ Computes a gradient vector from two non-empty numpy.array.
 
