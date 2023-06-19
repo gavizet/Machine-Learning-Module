@@ -32,19 +32,23 @@ def minmax(x: np.ndarray) -> np.ndarray | None:
     """
     if not _is_valid_ndarray_vector(x):
         return None
+    min_value = np.min(x)
+    max_value = np.max(x)
+    x_prime = (x - min_value) / (max_value - min_value)
+    return x_prime
 
 
 def main_tests():
     # Example 1:
     X = np.array([[0], [15], [-9], [7], [12], [3], [-21]])
     result1 = minmax(X)
-    expected1 = np.array([[0.58333333,
-                           1.,
-                           0.33333333,
-                           0.77777778,
-                           0.91666667,
-                           0.66666667,
-                           0.]])
+    expected1 = np.array([[0.58333333],
+                          [1.],
+                          [0.33333333],
+                          [0.77777778],
+                          [0.91666667],
+                          [0.66666667],
+                          [0.]])
     np.testing.assert_array_almost_equal(result1, expected1)
 
     # Example 2:
@@ -58,6 +62,7 @@ def main_tests():
                           0.6969697,
                           0.])
     np.testing.assert_array_almost_equal(result2, expected2)
+    print("Tests for minmax.py raised no assert error, gg.")
 
 
 if __name__ == "__main__":
