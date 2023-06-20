@@ -49,6 +49,7 @@ def simple_predict(x: np.ndarray, theta: np.ndarray) -> np.ndarray | None:
 
 
 def main():
+    """ Little test function """
     x = np.arange(1, 13).reshape((4, -1))
 
     # Example 1:
