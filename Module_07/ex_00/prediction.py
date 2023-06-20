@@ -37,7 +37,8 @@ def simple_predict(x: np.ndarray, theta: np.ndarray) -> np.ndarray | None:
         y_hat (numpy.array) : vector of dimension m * 1, represents our predictions
         None if x or theta are not of the required dimensions or type.
     """
-    if x.shape[1] + 1 != theta.size:
+    if x.shape[1] + 1 != theta.size or \
+            theta.shape not in [(theta.size, 1), (theta.size, )]:
         return None
     # Add column of ones left of our matrix X so we can do the dot product between X and theta.
     # We essentially just multiply / scale theta_0 by 1 here, which does not change
