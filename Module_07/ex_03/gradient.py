@@ -42,6 +42,7 @@ def gradient(x: np.ndarray, y: np.ndarray, theta: np.ndarray) -> np.ndarray | No
     m, n = x.shape
     # Check vectors are of valid dimension and compatible shape with matrix x
     if y.shape not in [(m, 1), (m, )] or theta.shape not in [(n, 1), (n, )]:
+        print("Hey, should enter here")
         return None
     # Add column of 1s left of Matrix so we can vectorize the equation
     # (we just scale theta_0 by 1). x_prime is of dimension m * n + 1
@@ -51,7 +52,7 @@ def gradient(x: np.ndarray, y: np.ndarray, theta: np.ndarray) -> np.ndarray | No
     # Transpose X' so it is now (n + 1) * m
     x_transpose = np.transpose(x_prime)
     # Do the dot product between X'T (n + 1, m) and vector (m, 1). Resulting shape is (n + 1, 1)
-    gradient_vector = x_transpose.dot(y_hat - y) / x_prime.shape[0]
+    gradient_vector = (x_transpose.dot(y_hat - y)) / (x_prime.shape[0])
     return gradient_vector
 
 
@@ -80,6 +81,10 @@ def tests():
                         [23.28571429], [-26.42857143]])
     np.testing.assert_array_almost_equal(result, expected)
 
+    # If result is None, i.e the dimensions / type of an argument is not valid,
+    # the np.testing.assert will throw a TypeError as we are trying to compare
+    # a NoneType (result of gradient()) and a float(expected numpy array result)
+    # This is normal and expected behavior.
     print("All tests passing, no assert raised, gg")
 
 
