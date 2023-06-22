@@ -39,3 +39,27 @@ ERRORS = [
 def test_errors_vec_gradient(x, y, theta, expected):
     result = gradient(x, y, theta)
     assert result == expected
+
+
+y = np.array([2, 14, -13, 5, 12, 4, -19]).reshape((-1, 1))
+theta1 = np.array([3, 0.5, -6]).reshape((-1, 1))
+theta2 = np.array([0, 0, 0]).reshape((-1, 1))
+
+GRADIENTS = [
+    # Example 1
+    (x, y, theta1, np.array([[-33.71428571],
+                             [-37.35714286],
+                             [183.14285714],
+                             [-393.]])),
+    # Example 2
+    (x, y, theta2, np.array([[-0.71428571],
+                             [0.85714286],
+                             [23.28571429],
+                             [-26.42857143]])),
+]
+
+
+@pytest.mark.parametrize("x, y, theta, expected", GRADIENTS)
+def test_gradient_vectorized(x, y, theta, expected):
+    np.testing.assert_array_almost_equal(gradient(x, y, theta),
+                                         expected)
