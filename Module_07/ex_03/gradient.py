@@ -39,6 +39,10 @@ def gradient(x: np.ndarray, y: np.ndarray, theta: np.ndarray) -> np.ndarray | No
         containg the result of the formula for all J (loss).
         None if y or y_hat are not of the required dimensions or type.
     """
+    m, n = x.shape
+    # Check vectors are of valid dimension and compatible shape with matrix x
+    if y.shape not in [(m, 1), (m, )] or theta.shape not in [(n, 1), (n, )]:
+        return None
     # Add column of 1s left of Matrix so we can vectorize the equation
     # (we just scale theta_0 by 1). x_prime is of dimension m * n + 1
     x_prime = np.c_[np.ones((x.shape[0], 1)), x]
