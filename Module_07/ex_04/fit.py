@@ -3,7 +3,7 @@ multivariate linear regression """
 import numpy as np
 from Module_07.ex_01.prediction import predict_
 from Module_07.ex_02.loss import loss_
-from Module_07.ex_03.gradient import gradient
+# from Module_07.ex_03.gradient import gradient
 
 
 def _args_are_valid_arrays(function):
@@ -30,7 +30,31 @@ def _args_are_valid_arrays(function):
 
 
 @_args_are_valid_arrays
-def fit_(x: np.ndarray, y: np.ndarray, theta: np.ndarray, alpha: float, max_iter: int) -> np.ndarray | None:
+def gradient(x: np.ndarray, y: np.ndarray, theta: np.ndarray) -> np.ndarray | None:
+    """ Computes a gradient vector from three non-empty numpy.array.
+
+    Args:
+        x (numpy.ndarray): matrix m * n, training examples, m = num of values, n = num of features
+        y (numpy.ndarray): vector m * 1, predicted values
+        theta (numpy.ndarray): vector (n + 1) * 1, our parameters
+
+    Return:
+        gradient (numpy.ndarray): vector (n + 1) * 1
+        containg the result of the formula for all J (loss).
+        None if y or y_hat are not of the required dimensions or type.
+    """
+    # Get predicted values, vector m * 1
+    y_hat = x.dot(theta)
+    # Transpose X' so it is now (n + 1) * m
+    x_transpose = np.transpose(x)
+    # Do the dot product between X'T (n + 1, m) and vector (m, 1). Resulting shape is (n + 1, 1)
+    gradient_vector = (x_transpose.dot(y_hat - y)) / (x.shape[0])
+    return gradient_vector
+
+
+@_args_are_valid_arrays
+def fit_(x: np.ndarray, y: np.ndarray, theta: np.ndarray,
+         alpha: float, max_iter: int) -> np.ndarray | None:
     """ Fits the model to the training dataset contained in x and y.
 
     Args:
@@ -45,14 +69,23 @@ def fit_(x: np.ndarray, y: np.ndarray, theta: np.ndarray, alpha: float, max_iter
         new_theta (numpy.ndarray): vector (n + 1) * 1, our new parameters
         None if any parameters is not of the required dimensions or type.
     """
-    m, n = x.shape
+    # Add column of 1s left of Matrix so we can vectorize the equation
+    x = np.c_[np.ones((x.shape[0], 1)), x]
     # Check vectors are of valid dimension and compatible shape with matrix x
+    m, n = x.shape
     if y.shape not in [(m, 1), (m, )] or theta.shape not in [(n, 1), (n, )]:
         return None
     if not isinstance(alpha, float) or not isinstance(max_iter, int):
         return None
-    if not 0 < alpha < 1 or max_iter <= 0:
+    if not 0 <= alpha <= 1 or max_iter < 1:
         return None
+    # Cast as float64, otherwise numpy throws a _UFuncOutputCastingError
+    theta = theta.astype('float64')
+    for _ in range(max_iter):
+        # Get gradient vector containing all the partial derivatives for each parameters
+        # then update theta (parameters) based on our learning rate (alpha) and the gradient
+        theta -= alpha * gradient(x, y, theta)
+    return theta
 
 
 def tests():
@@ -64,12 +97,17 @@ def tests():
 
     # Example 0:
     theta2 = fit_(x, y, theta, alpha=0.0005, max_iter=42000)
-    print(theta2)
-    # expected = np.array([[41.99..],[0.97..], [0.77..], [-1.20..]])
+    expected = np.array([[41.99888822],
+                         [0.97792316],
+                         [0.77923161],
+                         [-1.20768386]])
 
     # Example 1:
     result = predict_(x, theta2)
-    # expected = np.array([[19.5992..], [-2.8003..], [-25.1999..], [-47.5996..]])
+    expected = np.array([[19.59925884],
+                         [-2.80037055],
+                         [-25.19999994],
+                         [-47.59962933]])
 
     print("All tests passing, no assert raised, gg")
 
