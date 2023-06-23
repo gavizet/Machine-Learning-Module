@@ -2,8 +2,6 @@
 multivariate linear regression """
 import numpy as np
 from Module_07.ex_01.prediction import predict_
-from Module_07.ex_02.loss import loss_
-# from Module_07.ex_03.gradient import gradient
 
 
 def _args_are_valid_arrays(function):
@@ -34,7 +32,8 @@ def gradient(x: np.ndarray, y: np.ndarray, theta: np.ndarray) -> np.ndarray | No
     """ Computes a gradient vector from three non-empty numpy.array.
 
     Args:
-        x (numpy.ndarray): matrix m * n, training examples, m = num of values, n = num of features
+        x (numpy.ndarray): matrix m * n + 1, training examples, 
+                            m = num of values, n = num of features
         y (numpy.ndarray): vector m * 1, predicted values
         theta (numpy.ndarray): vector (n + 1) * 1, our parameters
 
@@ -69,18 +68,16 @@ def fit_(x: np.ndarray, y: np.ndarray, theta: np.ndarray,
         new_theta (numpy.ndarray): vector (n + 1) * 1, our new parameters
         None if any parameters is not of the required dimensions or type.
     """
+    if not isinstance(alpha, float) or not isinstance(max_iter, int):
+        return None
+    if not 0 <= alpha <= 1 or max_iter < 1:
+        return None
     # Add column of 1s left of Matrix so we can vectorize the equation
     x = np.c_[np.ones((x.shape[0], 1)), x]
     # Check vectors are of valid dimension and compatible shape with matrix x
     m, n = x.shape
     if y.shape not in [(m, 1), (m, )] or theta.shape not in [(n, 1), (n, )]:
         return None
-    if not isinstance(alpha, float) or not isinstance(max_iter, int):
-        return None
-    if not 0 <= alpha <= 1 or max_iter < 1:
-        return None
-    # Cast as float64, otherwise numpy throws a _UFuncOutputCastingError
-    theta = theta.astype('float64')
     for _ in range(max_iter):
         # Get gradient vector containing all the partial derivatives for each parameters
         # then update theta (parameters) based on our learning rate (alpha) and the gradient
@@ -101,6 +98,7 @@ def tests():
                          [0.97792316],
                          [0.77923161],
                          [-1.20768386]])
+    np.testing.assert_array_almost_equal(theta2, expected)
 
     # Example 1:
     result = predict_(x, theta2)
@@ -108,6 +106,7 @@ def tests():
                          [-2.80037055],
                          [-25.19999994],
                          [-47.59962933]])
+    np.testing.assert_array_almost_equal(result, expected)
 
     print("All tests passing, no assert raised, gg")
 
