@@ -23,30 +23,6 @@ class MyLinearRegression():
         # Cast as float64, otherwise numpy throws a _UFuncOutputCastingError during fit_
         self.thetas = thetas.astype('float64')
 
-    @staticmethod
-    def _args_are_valid_ndarrays(*args) -> bool:
-        """ Make sure the parameters are numpy ndarrays of valid dimensions for our program
-
-        Args:
-            *args (numpy.ndarray): vectors of dimension m * 1
-
-        Returns:
-            bool: True if args are of the desired type and dimensions, False otherwise
-        """
-        args_num = len(args)
-        if args_num > 2:
-            return False
-        if args_num == 2 and args[0].shape != args[1].shape:
-            return False
-        for arg in args:
-            if not isinstance(arg, np.ndarray):
-                return False
-            if not (np.issubdtype(arg.dtype, np.integer) or np.issubdtype(arg.dtype, np.floating)):
-                return False
-            if arg.size == 0 or arg.shape not in [(arg.size, ), (arg.size, 1)]:
-                return False
-        return True
-
     def _args_are_valid_arrays(self, function):
         """ Little generator for error handling """
         def wrapper(*args, **kwargs):
@@ -71,22 +47,6 @@ class MyLinearRegression():
         return wrapper
 
     @_args_are_valid_arrays
-    def add_intercept_(self, x: np.ndarray) -> np.ndarray | None:
-        """ Adds a column of '1' to the x numpy.ndarray.
-        Args:
-            x (numpy.ndarray): has to be of dimension m * n.
-
-        Returns:
-            x_prime (numpy.array): of dimension m * (n + 1).
-            None if any argument is not of the expected type or dimensions.
-        """
-        # Create column filled with 1s with same size as x
-        ones_col = np.ones((x.shape[0], 1))
-        # Add column left of vector x so it becomes a Matrix X'
-        x_prime = np.c_[ones_col, x]
-        return x_prime
-
-    @_args_are_valid_arrays
     def predict_(self, x: np.ndarray) -> np.ndarray | None:
         """ Computes the vector of prediction y_hat from two non-empty numpy.array 
             representing our input values (x) and our parameters (theta).
@@ -98,29 +58,18 @@ class MyLinearRegression():
             y_hat (np.ndarray): vector of dimension m * 1, represents our expected values.
             None if any argument is not of the expected type or dimensions.
         """
-        x_prime = self.add_intercept_(x)
-        # Do dot product between X' (input values) and theta (params) to get our expected values
+        x_prime = np.c_[np.ones((x.shape[0], 1)), x]
+        # Do dot product between X' (input values) and theta (params) to get our predicted values
         y_hat = x_prime.dot(self.thetas)
         return y_hat
 
     @_args_are_valid_arrays
-    def loss_elem_(self, y: np.ndarray, y_hat: np.ndarray) -> np.ndarray | None:
-        """ Computes all the elements (y_pred - y)^2 of the loss function.
-
-        Args:
-            y (numpy.ndarray): vector of dimensions m * 1.
-            y_hat (numpy.ndarray): vector of dimensions m * 1
-
-        Returns:
-            loss_elem (numpy.ndarray): vector of dimension m * 1.
-            None if any argument is not of the expected type or dimensions.
-        """
-        elem_loss = np.square(y_hat - y)
-        return elem_loss
+    def loss_elem_(self, y_hat: np.ndarray, y: np.ndarray) -> np.ndarray | None:
+        return np.square(y_hat - y)
 
     @_args_are_valid_arrays
     def loss_(self, y: np.ndarray, y_hat: np.ndarray) -> np.ndarray | None:
-        """ Computes the half mean squared error between y_hat and y
+        """ Computes the half MSE between y_hat and y
 
         Args:
             y (np.ndarray): vector (m, 1), the real values.
@@ -130,10 +79,10 @@ class MyLinearRegression():
             loss : float, the lower it is, the better
             None if any argument is not of the expected type or dimensions.
         """
-        elem_num = len(y)
         # Sum the loss for each expected value and divide by the number of values * 2
         # to get our loss number
-        loss = np.sum(self.loss_elem_(y, y_hat)) / (elem_num * 2)
+        loss = np.sum(self.loss_elem_(y_hat, y)) / (len(y_hat) * 2)
+        loss = self.mse_ / 2
         return loss
 
     @_args_are_valid_arrays
@@ -149,30 +98,28 @@ class MyLinearRegression():
             mse: has to be a float. 
             None if any argument is not of the expected type or dimensions.
         """
-        elem_num = len(y)
-        mse = np.sum(self.loss_elem_(y, y_hat)) / elem_num
+        mse = np.sum(self.loss_elem_(y_hat, y)) / len(y_hat)
         return mse
 
     @_args_are_valid_arrays
     def gradient_(self, x: np.ndarray, y: np.ndarray) -> np.ndarray | None:
-        """ Computes a gradient vector from two non-empty numpy.array.
+        """ Computes a gradient vector
 
         Args:
-            x (numpy.array): vector of shape m * 1.
-            y (numpy.ndarray): vector of shape m * 1.
+            x (numpy.ndarray): matrix m * n + 1, training examples, 
+                                m = num of values, n = num of features
+            y (numpy.ndarray): vector m * 1, predicted values
 
         Return:
-            gradient (numpy.ndarray): vector of the same dimensions as self.thetas.
-            None if any argument is not of the expected type or dimensions.
+            gradient (numpy.ndarray): vector (n + 1) * 1
+            None if y or y_hat are not of the required dimensions or type.
         """
-        elem_num = len(x)
-        # Get predicted values
+        # Get predicted values, vector m * 1
         y_hat = self.predict_(x)
-        # Add column to input values x to make it a matrix,
-        # then Transpose so we can multiply with (y_hat - y).
-        x_prime_transpose = np.transpose(self.add_intercept_(x))
-        # Get gradient so we know in which direction we need to move each theta
-        gradient = (x_prime_transpose.dot(y_hat - y)) / elem_num
+        # Transpose X' so it is now (n + 1) * m
+        x_transpose = np.transpose(x)
+        # Do the dot product between X'T (n + 1, m) and vector (m, 1). Resulting shape is (n + 1, 1)
+        gradient = (x_transpose.dot(y_hat - y)) / (x.shape[0])
         return gradient
 
     @_args_are_valid_arrays
@@ -187,10 +134,15 @@ class MyLinearRegression():
         Returns:
             None if any argument is not of the expected type or dimensions.
         """
+        x = np.c_[np.ones((x.shape[0], 1)), x]
+        m, n = x.shape
+        if y.shape not in [(m, 1), (m, )] or self.thetas.shape not in [(n, 1), (n, )]:
+            return None
         for _ in range(self.max_iter):
             # Get gradiant for current value of thetas (params) then
             # update thetas based on alpha and the gradient value we just got
             self.thetas -= self.alpha * self.gradient_(x, y)
+        return self.thetas
 
 
 def tests():
@@ -216,7 +168,7 @@ def tests():
     np.testing.assert_array_almost_equal(y_hat, expected_yhat)
 
     # Example 0.1:
-    result = lr1.loss_elem_(y, y_hat)
+    result = lr1.loss_elem_(y_hat, y)
     expected = np.array([[710.45867381],
                         [364.68645485],
                         [469.96221651],
@@ -248,7 +200,7 @@ def tests():
     np.testing.assert_array_almost_equal(y_hat, expected)
 
     # Example 1.2:
-    result = lr2.loss_elem_(y, y_hat)
+    result = lr2.loss_elem_(y_hat, y)
     expected = np.array([[355.597918],
                         [72.629391],
                         [64.062976],
